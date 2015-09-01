@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Solarsystem-workshop : Tutorial on creating planets of the solar system in Blender using Python scripting">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Solarsystem-workshop</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/kristinriebe/solarsystem-workshop">View on GitHub</a>
+
+          <h1 id="project_title">Solarsystem-workshop</h1>
+          <h2 id="project_tagline">Tutorial on creating planets of the solar system in Blender using Python scripting</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/kristinriebe/solarsystem-workshop/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/kristinriebe/solarsystem-workshop/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="creating-planets-of-the-solar-system-with-blender" class="anchor" href="#creating-planets-of-the-solar-system-with-blender" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating planets of the solar system with Blender</h1>
+
+<p><img width="100%" src="./planets-long.png"></p>
+
+<p>These instructions will guide you through creating planets of the solar system in 3D using Blender and its Python API. At the end, you will have written a Python script which creates your planets, their orbits and even animates their rotation from scratch in one go. If you get stuck at some point, you can contact me at 
+<a href="mailto:kristin.riebe@mk-star.de">kristin.riebe@mk-star.de</a>.</p>
+
+<p>Have fun!</p>
+
+<h2>
+<a id="materials" class="anchor" href="#materials" aria-hidden="true"><span class="octicon octicon-link"></span></a>Materials</h2>
+
+<p>Following files are provided/needed:</p>
+
+<ul>
+<li>
+<a href="https://github.com/kristinriebe/solarsystem-workshop/blob/master/planets-template.blend">planets-template.blend</a>: 
+a blender file with basic setup</li>
+<li>
+<a href="https://github.com/kristinriebe/solarsystem-workshop/blob/master/create_planet.py">create_planet.py</a>: 
+a simple script for creating one planet</li>
+<li>
+<a href="https://github.com/kristinriebe/solarsystem-workshop/blob/master/planets.csv">planets.csv</a>: 
+file with most basic parameters for each planet of the solar system and the sun</li>
+<li>
+<a href="https://github.com/kristinriebe/solarsystem-workshop/blob/master/textures">textures</a>: 
+directory with texture maps of the planets</li>
+<li>
+<a href="https://github.com/kristinriebe/solarsystem-workshop/blob/master/rings.py">rings.py</a>: 
+contains two functions for adding rings around Saturn and Uranus</li>
+<li>(Extra:) <a href="https://github.com/kristinriebe/blendertools/blob/master/animate_camera.py">animate_camera.py</a>:
+a script that sets the camera moving along a path looking at a certain object</li>
+</ul>
+
+<p>Other things you need:</p>
+
+<ul>
+<li>Blender (download from <a href="http://www.blender.org">blender.org</a>). These instructions were only tested with version 2.75. I expect them to work with versions from ~ 2.6 on. Install it such that you can start Blender directly from the command line.</li>
+<li>Web browser with internet connection, for checking the online documentation or Blender StackExchange occasionally for help</li>
+</ul>
+
+<p>It helps, if you are already a bit familiar with Blender's graphical user interface. Look at e.g. the <a href="http://www.blender.org/manual/">Blender manual</a> or follow these short <a href="https://cgcookie.com/course/blender-basics/">Blender basics videos</a>. </p>
+
+<p>Ready? Let's get started!</p>
+
+<h2>
+<a id="basic-instructions" class="anchor" href="#basic-instructions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic instructions</h2>
+
+<ul>
+<li>
+<p>Open <code>planets-template.blend</code> with Blender from the command line:</p>
+
+<p><code>blender planets-template.blend</code></p>
+
+<p>Go to <code>File</code>-&gt;<code>Save As</code> to save it under a custom name, e.g. 
+just <code>planets.blend</code>.</p>
+</li>
+<li><p>Your 3D scene is shown in the <em>3D view</em> area, that's the big central area.
+The template already contains a camera, a bright point lamp in the center to illuminate the planets you are going to create and a dark blue world background with a bit environment light switched on so that shadows are not too dark. You don't see its effects now, only later, when rendering your scene (<code>F12</code>).</p></li>
+<li><p>The window layout is already changed to <code>Scripting</code> for you (in the top
+menu bar, next to <code>File</code>, <code>Render</code>, <code>Window</code> and <code>Help</code>). 
+Go to the <em>Text Editor</em> area, (left main area) and load a script by selecting <code>Text</code>-&gt;<code>Open Text Block</code> and choosing <code>create_planet.py</code>.</p></li>
+<li><p>Select <code>Text</code>-&gt;<code>Run Script</code> to execute the script. A blue sphere called 
+<code>Planet-Earth</code> should appear in your <em>3D view</em>.</p></li>
+</ul>
+
+<p>If this works, then you can go ahead, expand the script and experiment with the following tasks. If it didn't work, check the output in the console from which you started Blender for error messages. </p>
+
+<h2>
+<a id="experimenting" class="anchor" href="#experimenting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Experimenting</h2>
+
+<ul>
+<li><p>Look in the Python script in your <em>Text area</em> for the <code>add_sphere</code>-function.
+Improve it such that the <code>size</code> (radius) of the sphere is provided as an 
+additional parameter. This should be used in Blender's 
+<code>primitive_uv_sphere_add</code> function to create the sphere.</p></li>
+<li><p>Provide e.g. <code>size=2</code> in the <em>main</em>-function when creating the sphere and 
+rerun your script. Check if the size has changed correctly. Note that the 
+script contains a <code>delete_objects</code>-function that removes all objects with 
+names matching <code>Planet*</code> from the scene. This is useful to cleanup before 
+recreating your planet.</p></li>
+<li><p>Adjust the material settings in the <code>add_material</code> function to create a planet with a different base color (e.g. red for <code>diffuse_color</code>) and no specular. Colors are given as RGB-triplets in Blender, so red would be 
+<code>[1,0,0]</code>.</p></li>
+</ul>
+
+<h2>
+<a id="more-planets" class="anchor" href="#more-planets" aria-hidden="true"><span class="octicon octicon-link"></span></a>More planets</h2>
+
+<p>So far, all these things can be done much faster via the interface. But such a script becomes very useful when creating more than one planet at once. Let's do this! </p>
+
+<ul>
+<li>
+<p>Write a read-routine to read planet and sun parameters from the provided 
+csv-file. Blender comes with bundled Python that also includes the csv-module for reading comma-separated value files, which makes this task very easy, e.g like this:  </p>
+
+<div class="highlight highlight-python"><pre>  <span class="pl-k">with</span> <span class="pl-c1">open</span>(myfilename) <span class="pl-k">as</span> csvfile:
+      reader <span class="pl-k">=</span> csv.DictReader(csvfile, <span class="pl-smi">delimiter</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>,<span class="pl-pds">'</span></span>)
+      lines <span class="pl-k">=</span> [r <span class="pl-k">for</span> r <span class="pl-k">in</span> reader 
+                  <span class="pl-k">if</span> <span class="pl-k">not</span> r[reader.fieldnames[<span class="pl-c1">0</span>]].startswith(<span class="pl-s"><span class="pl-pds">"</span>#<span class="pl-pds">"</span></span>)]</pre></div>
+
+<p>Be careful to provide the correct (full) path to your csv-file.
+  Alternatively you can also create a dictionary or array with parameters for different planets directly in your script. The parameters we use here are:  </p>
+
+<ul>
+<li>
+<code>name</code> of the planet (or sun) </li>
+<li>
+<code>radius</code> of the planet (at equator), in km<br>
+</li>
+<li>
+<code>art_distance</code> - artificial distance for good visual impression, 
+                 in Blender units<br>
+</li>
+<li>
+<code>distance</code> of the planet from the sun (semi-major axis)<br>
+</li>
+<li>
+<code>flattening</code> of the planet<br>
+</li>
+<li>
+<code>tilt</code> of the planet's axis<br>
+</li>
+<li>
+<code>rotperiod</code> - time for rotation of the planet around its axis in 
+              days<br>
+</li>
+<li>
+<code>eccentricity</code> of the planet's orbit<br>
+</li>
+<li>
+<code>orbitperiod</code> - time for rotation of the planet on its orbit 
+                    around the sun<br>
+</li>
+<li>
+<code>texture</code> image for the planet<br>
+</li>
+<li>
+<code>color</code> RGB triplet for the planet<br>
+</li>
+</ul>
+</li>
+<li><p>In your main-function, write a loop to create more than one planet at once, 
+with different names and sizes. Use the column <code>art_distance</code> from the provided csv-file to set the planets apart, e.g. along the +<code>x</code>-axis, 
+using <code>location</code> when adding the sphere.</p></li>
+<li><p>Take care to <strong>scale down the radii</strong> of the planets and the Sun to something between 0 and 10 Blender units, otherwise they may be too big to be visible in your Blender scene. (A basic size scale factor of 1/100,000 is a good value. For better visual impressions, increase the size of rocklike planets (Mercury, Venus, Earth, Mars) by a factor of 6, gas planets by a factor of 2.)</p></li>
+</ul>
+
+<h2>
+<a id="sun-material-adjustments" class="anchor" href="#sun-material-adjustments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sun material adjustments</h2>
+
+<p>The Sun is special, since its a self-glowing star. Thus it needs some material adjustments. 
+In general, you can discover the available attributes for objects and materials via the <em>Python Console</em>: </p>
+
+<ul>
+<li>First get the Sun-object: <code>obj = bpy.data.objects['Planet-Sun']</code>.<br>
+</li>
+<li>Type <code>obj.</code> and press <code>Ctrl</code>+<code>Space</code> in the console to get autocomplete suggestions.</li>
+<li>You can select the (first) material of your object using: 
+<code>mat = obj.material_slots[0].material</code>.</li>
+<li>Type <code>mat.</code> and press <code>Ctrl</code>+<code>Space</code> in the console to explore the available attributes. You can also set them here and see their effects immediately.</li>
+<li>
+<p>In your script, include:  </p>
+
+<div class="highlight highlight-python"><pre><span class="pl-c"># suppress any shadows and don't receive any</span>
+mat.use_shadeless <span class="pl-k">=</span> <span class="pl-c1">True</span>
+mat.use_shadows <span class="pl-k">=</span> <span class="pl-c1">False</span>
+
+<span class="pl-c"># allow light of point source to transmit through the sun's surface</span>
+mat.use_cast_shadows <span class="pl-k">=</span> <span class="pl-c1">False</span>
+mat.use_cast_buffer_shadows <span class="pl-k">=</span> <span class="pl-c1">False</span></pre></div>
+</li>
+</ul>
+
+<h2>
+<a id="colors-and-texture" class="anchor" href="#colors-and-texture" aria-hidden="true"><span class="octicon octicon-link"></span></a>Colors and texture</h2>
+
+<ul>
+<li><p>It's boring if they all have the same color, so use a different color triplet for each planet. You can use the values from the file (parse them and convert them to a list of three values) or choose your own. Pass the color-triplet on to the <em>add_material</em> function, use it for <code>diffuse_color</code> in the script and rerun the script. Check, if every planet got its own color now.</p></li>
+<li><p>Adjust the position of your camera, so you get a good view on all your planets. (Check by going into <em>Camera View</em>: <em>View</em>, <em>Camera</em> or <code>Numpad 0</code>.)
+Render your scene with <em>Render</em> (top menu), <em>Render Image</em> or hit <code>F12</code>.</p></li>
+<li><p>Let's make the planets even prettier by adding an image texture map to each 
+of them. Most planet textures are freely available from NASA. Download your own texture maps or use those from the <em>textures</em>-directory. Adjust the name of the texture image for each planet in your csv-file/dictionary.</p></li>
+<li><p>Enable the <em>add_texture</em> function in the script's main-function. Make sure
+to provide the correct path to your images; otherwise your script will fail. 
+This function will load the image to a texture and map it using spherical coordinates.</p></li>
+<li><p>Rerun your script. The texture will only be visible when rendered, so render your scene again (<code>F12</code>). </p></li>
+</ul>
+
+<h2>
+<a id="flattening" class="anchor" href="#flattening" aria-hidden="true"><span class="octicon octicon-link"></span></a>Flattening</h2>
+
+<ul>
+<li>Actually, planets are rarely exact spheres, but mostly a bit flattened in z-direction. This is described by the flattening parameter, given e.g. at Wikipedia for each planet. <code>0</code> flattening is a perfect sphere. Adjust each planet-sphere's <code>z</code>-scale by the factor <code>1-flattening</code> in your script.</li>
+</ul>
+
+<h2>
+<a id="axial-tilt" class="anchor" href="#axial-tilt" aria-hidden="true"><span class="octicon octicon-link"></span></a>Axial tilt</h2>
+
+<ul>
+<li>
+<p>Improve your script even further by adding a tilt to the planet's axis. The axial tilt is defined as deviation from the axis perpendicular to the planet's orbit, with Earth's north pole pointing upwards.
+The true direction to which the planet's north pole points is usually given in Earth's coordinate system. For simplicity, the provided csv-file already gives the correct precalculated rotation angles around x, y and z-axes for each planet in the global coordinate system. Thus you only need to set:</p>
+
+<p><code>rotation_euler.x = tilt_x/180. * pi</code></p>
+
+<p>etc. The angles in the file are given in degrees, thus they must be converted to radians first using angle[rad] = angle[degree] / 180 * pi.</p>
+</li>
+</ul>
+
+<h2>
+<a id="extra-add-rings" class="anchor" href="#extra-add-rings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extra: Add rings</h2>
+
+<ul>
+<li><p>Saturn is popular for its prominent ring system. Such rings are a bit tricky to set up, so there are functions prepared that take care of this for you, stored in <code>rings.py</code>. This uses more advances techniques which we won't discuss here. In principle, for Saturn we add a disk with a hole and put a ring texture on top of it; for Uranus we create one circle with a thin thickness. </p></li>
+<li>
+<p>Copy the functions over or load them as a module by adding following lines at the beginning of your script:  </p>
+
+<div class="highlight highlight-python"><pre>blend_dir <span class="pl-k">=</span> os.path.dirname(bpy.data.filepath)
+<span class="pl-k">if</span> blend_dir <span class="pl-k">not</span> <span class="pl-k">in</span> sys.path:
+    sys.path.append(blend_dir)
+<span class="pl-k">import</span> rings
+<span class="pl-k">import</span> imp
+imp.reload(rings)</pre></div>
+
+<p>The reload-line ensures that the rings-module is reloaded every time you run the script. This is important if you want to make custom changes there.</p>
+</li>
+<li><p>Add calls for the functions <code>add_saturn_rings</code> and <code>add_uranus_rings</code> to your main function. Neptune and Jupiter also have rings, but they are very thin and we'll skip them here.</p></li>
+</ul>
+
+<h2>
+<a id="simple-orbit-paths" class="anchor" href="#simple-orbit-paths" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple orbit paths</h2>
+
+<ul>
+<li><p>Add a circle as orbit path for each planet (not for the Sun!), using <code>art_distance</code> for radius. This can be done via Blender's interface, <code>Add</code>, <code>Curve</code>, <code>Circle</code>. </p></li>
+<li><p>Check in the log-output (<em>Info</em> window at the top) which function was used. Write your own <code>add_orbit</code>-function for your script to add an orbit circle for each planet. Do not make an orbit path for the Sun.</p></li>
+<li><p>Name the orbit paths e.g. 'Planet-Earth-Orbit' etc. If you use the same 'Planet-' prefix as for the planet spheres, they will also be automatically deleted every time you run the script again.</p></li>
+<li><p>Adjust the circles' resolution to increase the number of points for the curve and thus its smoothness (e.g. 60). You can find this setting in the <em>Properties</em> area at the right side, in the <em>Data</em> tab (small line symbol). Add this to your <em>add_orbit</em> function as well.</p></li>
+<li><p>The circles cannot be seen in a rendered image, unless you give them some thickness. Thus increase the circles' thickness by setting the bevel depth to 0.006 or higher. In the interface, these setting are adjusted in the <em>Properties</em> area, at the tab for <em>Data</em> (bend curve symbol). Here you can look for the correct Blender attributes for your circle object and experiment which settings look good for you. Add them to your script as well.</p></li>
+<li><p>You may want to add a material to your orbits and adjust its shadow and shading options, so that orbits do not cast or receive any shadows. This is achieved with exactly the same settings as for the Sun material which was explained above.</p></li>
+<li><p>In fact, the planets orbit on ellipses, with the Sun at one of the focal points. We'll ignore this in this workshop and stick to the simplified circles.</p></li>
+</ul>
+
+<h2>
+<a id="extra-orbit-eccentricity" class="anchor" href="#extra-orbit-eccentricity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extra: Orbit eccentricity</h2>
+
+<ul>
+<li><p>Take the orbit eccentricity into account:
+shift the orbit path, so the sun lies at one of the focal points of the ellipse. I.e.: shift it in x-direction by a<em>ecc (semi-major axis * eccentricity).
+Scale the x-direction by a/distance, the y-direction by b/distance. b is the semi-minor axis, b = a</em>sqrt(1-ecc**2).
+(Don't forget <code>import math</code> for sqrt!)</p></li>
+<li><p>The orbit orientation is not yet correct - in truth, the orbits axes are not aligned! But taking the true orientation and also the inclination angle against e.g. Earth's orbit plane into account is beyond the scope of this workshop.</p></li>
+</ul>
+
+<h2>
+<a id="camera-animation-may-be-skipped-here" class="anchor" href="#camera-animation-may-be-skipped-here" aria-hidden="true"><span class="octicon octicon-link"></span></a>Camera Animation (may be skipped here)</h2>
+
+<ul>
+<li>
+<p>Let's get the camera moving and add a camera path. Follow the next steps first via Blender's graphical interface, then check the log-output and the mouse-over tips for the functions and attributes to script this part as well. </p>
+
+<ul>
+<li>Add a circle via <code>Add</code>, <code>Curve</code>, <code>Circle</code>. Rename it to something like <em>CameraPath</em>. Set its location to (0,0,0) (<code>Alt</code>+<code>G</code>). Scale it such that there is still some distance between the circle and the sun (view it from top view to check this, <code>Numpad 7</code>; scale factor ~ 3.3 if using the scales from above).</li>
+<li>Switch to <code>Edit Mode</code> (<code>Tab</code> key), drag the right-most point of the circle beyond the last planet. Switch back to <code>Object Mode</code> (<code>Tab</code> key).</li>
+<li>Select your camera. In the <em>Properties</em> area, switch to the <em>Constraints</em> tab (chain-symbol). Click on <code>Add Object Constraint</code> and select <code>Follow Path</code> at the right side in the menu.</li>
+<li>Choose your camera path as <code>target</code> for the Follow Path constraint and click <code>Animate Path</code>. </li>
+</ul>
+</li>
+<li><p>Split the <em>Python console</em> window horizontally and switch the new frame to <em>Timeline</em>. Click and drag the green line to move forward/backward in time. Can you see the camera moving?</p></li>
+<li>
+<p>We are not yet done, the camera still looks away from the planets. We need to constrain its look-direction as well by adding an empty object to look at and another constraint: </p>
+
+<ul>
+<li>Add an empty using <code>Add</code>, <code>Empty</code>, <code>Cube</code>. This adds a cube-object that will not be rendered. Place it e.g. directly at Jupiter.</li>
+<li>Add another constraint to your camera, choose <code>Track To</code>. This must be added below the Follow Path constraint. Select the just created empty object as <code>target</code>.</li>
+</ul>
+</li>
+<li><p>When you move the time slider, you should now see the camera always looking to your empty object. </p></li>
+<li><p>Do the same steps via scripting (also see <code>animate_camera.py</code>), in order to be able to reproduce them, when needed.</p></li>
+<li>
+<p>The camera moves quite fast, you can slow it down by adjusting the animation manually:</p>
+
+<ul>
+<li>Select the camera path, in <em>Properties</em> area switch to the <em>Curve data</em> tab and look for the <code>Evaluation time</code>. It is marked in green, because it is animated. Right click with the mouse and select <code>Clear keyframes</code>. </li>
+<li>In the timeline, choose frame 1. Set the curve's evaluation time to 0 and hit the <code>I</code> key while hovering over the evaluation time field. This sets a new animation keyframe (yellow). </li>
+<li>Now set the ti</li>
+<li>me to e.g. 500 frames, set the evaluation time of the curve to 100 and again hit <code>I</code>. This sets the second (final) keyframe. Your camera will now move along the whole path within 500 frames.</li>
+</ul>
+</li>
+<li><p>Further details of animations can be adjusted in the <em>Graph Editor</em>, we'll look into this in the next sections.</p></li>
+</ul>
+
+<h2>
+<a id="orbit-animation" class="anchor" href="#orbit-animation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Orbit animation</h2>
+
+<p>We will now let the planets move along their orbit paths.</p>
+
+<ul>
+<li><p>First do it for one planet and its path in the interface, then code the steps by checking which functions were used in the log/hover info. </p></li>
+<li><p>Reset the position of the planet to (0,0,0).</p></li>
+<li><p>Select the planet's orbit. In the <em>Properties</em> area, switch to the <em>Constraints</em> tab. Click <code>Add Object Constraint</code> and select <code>Follow Path</code>.</p></li>
+<li><p>As <code>target</code>, choose the planet's orbit path. This will constrain the movement of the planet to its path! It is important that the path's rotation angles are set to 0 here, otherwise the planet will "inherit" the rotation and appear upside down or otherwise rotated.</p></li>
+<li><p>Split the <em>Python Console</em> window horizontally (drag the triangle) and switch the new window to <em>Timeline</em> (if you haven't done so yet). Here you can set start and end frame of your animation and set the current frame. </p></li>
+<li>
+<p>In order to get the planet moving, we need to set animation keyframes on the <em>Evaluation time</em> of the path:</p>
+
+<ul>
+<li>Select the orbit path. In <em>Properties</em> area switch to <em>Curve data</em> tab and look for the <code>Evaluation time</code>. If the field is green, then right click with the mouse and select <code>Clear keyframes</code> first to reset everything. </li>
+<li>In the timeline, choose frame 1. Set the curve's evaluation time to 0 and hit the <code>I</code> key while hovering over the evaluation time field. This sets a new animation keyframe (yellow). </li>
+<li>Now set the time in your timeline to some duration, e.g. 365 frames. </li>
+<li>Set the evaluation time of the curve to 100 and again hit the <code>I</code> key. This sets the second (final) keyframe. </li>
+<li>Click and drag the green line to move forward/backward in time between these two keyframes. Can you see the planets moving on their orbits now?</li>
+</ul>
+</li>
+<li><p>Switch the <em>Python Console</em> window to <em>Graph Editor</em> to fine tune your animation curve. When you have the orbit path selected, you should see a curve that represents the interpolation of the evaluation time between your two set keyframes. You can use the mouse wheel to zoom in and out and <code>Shift</code>+ middle mouse button (<code>MMB</code>) to pan the area.</p></li>
+<li><p>Adjust the interpolation type of the curve in the right toolbar within the <em>Graph Editor</em> (enable with <code>T</code> key, if you cannot see it). At <em>Active keyframe</em>, choose <code>Interpolation</code>: <code>Linear</code> instead of the default Bezier curve. </p></li>
+<li><p>Planets also do not rotate only once, but repeatedly. To achieve this, we could repeat setting keyframes at multiples of the orbitperiod and evalution time, but we can simplify it by using a graph modifier. At <em>Modifiers</em> in the toolbar select <code>Cycles</code> and select <code>Repeat with Offset</code> for <em>Before</em> and <em>After</em>. </p></li>
+<li><p>That's (nearly) it! Your planet should move now continuously around the Sun on its orbit.</p></li>
+<li><p>There is still something not quite right: the planets of our solar system rotate counter-clockwise when seen from the northern side of the ecliptic, i.e. when seen from +z downwards in our Blender setup. But your planet currently moves in clock-wise direction! That's because your orbit circle has clock-wise direction. The easiest way to switch the orbit direction is to rotate it via the <code>y</code>-axis by <code>180</code> degrees. Add another rotation via its <code>z</code>-axis by <code>90</code> degrees to put the first point of the orbit along the +x-axis. Now <code>Apply</code> the orbit rotation: <code>Object</code>, <code>Apply</code>, <code>Rotation</code>. This applies the rotation to the points of the curve, they are all shifted now, and resets the rotation angles to 0. As mentioned already above, this is important for maintaining the correct planet orientation, otherwise the planet would inherit its orbits orientations.</p></li>
+<li><p>Include all these steps in your script for each planet. Set the keyframes according to the actual orbit rotation period given in the planets-file (<code>orbitperiod</code>). This value is given in days; use a timefactor to make your planets move slower or faster than 1 frame for 1 day.<br>
+<em>Hint:</em> use the <code>keyframe_insert</code>-function, e.g. like this: 
+<code>orbit.data.keyframe_insert(data_path="eval_time", frame=1)</code></p></li>
+<li><p>If you used ellipses, then the speed of the planets should be faster closer to the sun (according to Kepler's laws). Blender does not easily allow to do that, so we will ignore this here. Just be aware that the true speed would be different than what we currently have.</p></li>
+</ul>
+
+<h2>
+<a id="rotation-animation" class="anchor" href="#rotation-animation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rotation animation</h2>
+
+<p>Planets also rotate around their own axes, that's given by <code>rotperiod</code> in the file. This gets slightly more complicated than just adding animation keyframes for the <code>z</code>-rotation values, because the planet's axes are already tilted. If a z-rotation is added, then the planet would rotate around the current z-axis, not around the planet-axis. You can see this easily with Saturn and its rings or Earth, when changing the z-rotation value in the <em>3D view</em>, properties panel (enable with <code>N</code> if it is hidden).</p>
+
+<p>We therefore use a special trick: we add an axes object for each planet and assign it the axial tilt. Then we clear the rotation of the planet and <em>parent</em> it to the axes object. This has the effect that the planet is basically unrotated, but inherits the tilt from its parent axes object. Now it's possible to keyframe the z-rotation of the planet!</p>
+
+<ul>
+<li><p>Use <code>Add</code>, <code>Empty</code>, <code>Arrows</code> in the interface and check from the log-output which function was used. Add this function in your script to create such arrows for each planet. Give it a name like <code>Planet-Earth-Axes</code> etc. for clear identification and to include it in the deleting process at the beginning of the script. </p></li>
+<li><p>Assign the planet's tilt angles to the corresponding axes object.</p></li>
+<li><p>Clear the planet's rotation angles, i.e. set them to (0,0,0).</p></li>
+<li><p>Add the axes-object as parent to each planet. In the interface, select a planet, go to the <em>Properties</em> area, switch to the <em>Object</em> tab and look for <code>Parent</code> at the <em>Relations</em>-section. Here one can enter the axes object. Check the tooltip for the field to get an idea how to include setting the parent in your script.</p></li>
+<li>
+<p>So far, nothing much has changed, the planets should still look the same. But now we are ready to add the rotation animation. Let's do it first in the interface:</p>
+
+<ul>
+<li>Select a planet (not it's axes!).</li>
+<li>In the <em>Timeline</em>, set the time to frame 1.</li>
+<li>In <em>3D view</em>, go to the properties region at the right side and look for the rotation. The <code>z rotation</code> should be 0. Hover with the mouse over this field and press the <code>I</code> key to insert a keyframe.</li>
+<li>Set the time to the rotation period, e.g. 10, set the rotation to 360 degrees and again insert a keyframe.</li>
+<li>Move the time slider to see the planet rotating around its axis.</li>
+<li>Switch your <em>Python Console</em> area (or any other) to the <em>Graph Editor</em> area, again set the <code>Interpolation</code> type to <code>Linear</code>.</li>
+<li>Add a <code>Cycles</code> modifier and set Before and After values to <code>Repeat with Offset</code>, just the same way as for the orbit animation. This ensures a continuous and smooth planet rotation.</li>
+</ul>
+</li>
+<li><p>Include these steps in your script, for each planet and for the Sun.</p></li>
+</ul>
+
+<h2>
+<a id="render-your-animation" class="anchor" href="#render-your-animation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Render your animation</h2>
+
+<ul>
+<li><p>Render your animation by selecting <code>Render</code>, <code>Render Animation</code> in the top menu. The render resolution and other properties can be adjusted in the <em>Properties</em> area, at the <em>Render</em> tab (photo camera symbol). By default, Blender will create one png-image for each frame in the <code>tmp</code>-directory. </p></li>
+<li><p>You can stop the rendering any time using the <code>Esc</code> key.</p></li>
+<li><p>Play your rendered animation with Blender, using <code>Render</code>, <code>Play Rendered Animation</code>.</p></li>
+<li>
+<p>It is also possible to render your frames in the background, using the command line:</p>
+
+<pre><code>blender -b &lt;blender-file&gt; -s 1 -e 600 -a
+</code></pre>
+
+<p>This will render the frames 1 to 600.</p>
+</li>
+</ul>
+
+<h2>
+<a id="further-improvements" class="anchor" href="#further-improvements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Further improvements</h2>
+
+<p>The solar system that we built up to now is still lacking in many details. Here are some suggestions to improve it further:</p>
+
+<ul>
+<li>Use real distances (scaled down by the same factor) for planets from the Sun.</li>
+<li>Switch on shadows for the lamp, so that rings and moons can cast shadows on their planets. This was switched off initially, because we had the planets unrealistically close to each other.</li>
+<li>Make orbits eccentric, use correct orbit orientation.</li>
+<li>Use true (non-uniform) speed along eccentric orbits.</li>
+<li>Use different image textures (e.g including clouds for Earth and Venus).</li>
+<li>Use animated textures, e.g. for the Sun to mimick evolving Sun spots, or for Earth to have different clouds evolving with time.</li>
+<li>Use UV-unwrapping for a more accurate mapping of textures to the sphere, especially at the poles.</li>
+<li>Add moons, minor planets and asteroids.</li>
+<li>Add stars in the background as reference system, maybe even the true stars from the sky, using a sky map.</li>
+</ul>
+
+<p>If you made it this far: thanks for staying with me and congratulations! I hope you enjoyed this tutorial. For comments and suggestions, mistakes or questions, please send a mail to <a href="mailto:kristin.riebe@mk-star.de">kristin.riebe@mk-star.de</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Solarsystem-workshop maintained by <a href="https://github.com/kristinriebe">kristinriebe</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-17603670");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
