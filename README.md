@@ -1,6 +1,6 @@
 #Creating planets of the solar system with Blender
 
-<img width="100%" src="./planets-long.png"/>
+<img width="100%" src="http://kristinriebe.github.io/solarsystem-workshop/images/planets-long.png"/>
 
 These instructions will guide you through creating planets of the solar system in 3D using Blender and its Python API. At the end, you will have written a Python script which creates your planets, their orbits and even animates their rotation from scratch in one go. If you get stuck at some point, you can contact me at 
 kristin.riebe@mk-star.de.
