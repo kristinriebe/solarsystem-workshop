@@ -11,7 +11,7 @@ def delete_planets():
     """Delete objects with names matching 'Planet*'"""
     
     bpy.ops.object.select_all(action='DESELECT')
-    bpy.ops.object.select_pattern(pattern='Planet*')
+    bpy.ops.object.select_pattern(pattern="Planet*")
     n = len(bpy.context.selected_objects)
     bpy.ops.object.delete()
 
@@ -79,7 +79,7 @@ def add_material(obj, name):
     """
     
     # create a material
-    matname = 'Material-' + name
+    matname = "Material-" + name
     mat = bpy.data.materials.new(matname)
     mat.diffuse_color = [0,0,1]
     mat.specular_intensity = 0.1
@@ -99,7 +99,7 @@ def add_sphere(name, location):
     # add object
     bpy.ops.mesh.primitive_uv_sphere_add(
         segments=48, ring_count=24, size=1.0,
-        location=location, rotation=(0,0,0))
+        location=location, rotation=[0,0,0])
     
     # get object
     obj = bpy.context.object
@@ -126,10 +126,10 @@ if __name__ == '__main__':
     
     # This would be a good place to start a loop over all planets.
     
-    location = (2.5,0,0)
+    location = [2.5,0,0]
 
-    name = 'Earth'
-    objname = 'Planet-' + name
+    name = "Earth"
+    objname = "Planet-" + name
 
     # create planet as sphere object
     obj = add_sphere(objname, location)
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     mat = add_material(obj, name)
     
     # add texture to the material
-    #imgname = dir + 'earth.jpg'
+    #imgname = dir + "earth.jpg"
     #add_texture(mat, imgname)
 
     # add flattening of planet-sphere
@@ -154,5 +154,3 @@ if __name__ == '__main__':
     # add rings for some planets
         
     # end of loop
-
-
