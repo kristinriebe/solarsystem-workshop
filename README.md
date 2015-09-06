@@ -60,7 +60,7 @@ If this works, then you can go ahead, expand the script and experiment with the 
     additional parameter. This should be used in Blender's 
     `primitive_uv_sphere_add` function to create the sphere.
 
-* Provide e.g. `size=2` in the *main*-function when creating the sphere and 
+* Provide e.g. `size=2` in the `main`-function when creating the sphere and 
     rerun your script. Check if the size has changed correctly. Note that the 
     script contains a `delete_objects`-function that removes all objects with 
     names matching `Planet*` from the scene. This is useful to cleanup before 
@@ -100,19 +100,20 @@ So far, all these things can be done much faster via the interface. But such a s
     - `texture` image for the planet  
     - `color` RGB triplet for the planet  
 
-* In your main-function, write a loop to create more than one planet at once, 
-  with different names and sizes. Use the column `art_distance` from the provided csv-file to set the planets apart, e.g. along the +`x`-axis, 
+* In your `main`-function, write a loop to create more than one planet at 
+  once, with different names and sizes. Use the column `art_distance` from the 
+  provided csv-file to set the planets apart, e.g. along the +`x`-axis, 
   using `location` when adding the sphere.
 
 * Take care to **scale down the radii** of the planets and the Sun to something between 0 and 10 Blender units, otherwise they may be too big to be visible in your Blender scene. (A basic size scale factor of 1/100,000 is a good value. For better visual impressions, increase the size of rocklike planets (Mercury, Venus, Earth, Mars) by a factor of 6, gas planets by a factor of 2.)
 
 ##Sun material adjustments
-The Sun is special, since its a self-glowing star. Thus it needs some material adjustments. 
-In general, you can discover the available attributes for objects and materials via the *Python Console*: 
+The Sun is special, since it is a self-glowing star. Thus its material needs to be adjusted. 
+In general, you can always discover the available attributes for objects and materials via the *Python Console*: 
 
 * First get the Sun-object: `obj = bpy.data.objects['Planet-Sun']`.  
 * Type `obj.` and press `Ctrl`+`Space` in the console to get autocomplete suggestions.
-* You can select the (first) material of your object using: 
+* You can select the (first) material of your object using:   
   `mat = obj.material_slots[0].material`.
 * Type `mat.` and press `Ctrl`+`Space` in the console to explore the available attributes. You can also set them here and see their effects immediately.
 * In your script, include:  
@@ -126,10 +127,11 @@ In general, you can discover the available attributes for objects and materials 
     mat.use_cast_shadows = False
     mat.use_cast_buffer_shadows = False
     ```
+* These settings could also be adjusted in the GUI, in the *Properties* area, *Material* tab, in sections `Shading` and `Shadow`. They ensure that the Sun does not receive any shadows and does not cast any.
 
 
 ##Colors and texture
-* It's boring if they all have the same color, so use a different color triplet for each planet. You can use the values from the file (parse them and convert them to a list of three values) or choose your own. Pass the color-triplet on to the *add_material* function, use it for `diffuse_color` in the script and rerun the script. Check, if every planet got its own color now.
+* It's boring if all the planets have got the same color, so use a different color triplet for each planet. You can use the values from the file (parse them and convert them to a list of three values) or choose your own. Pass the color-triplet on to the `add_material` function, use it for `diffuse_color` in the script and rerun the script. Check, if every planet got its own color now.
 
 * Adjust the position of your camera, so you get a good view on all your planets. (Check by going into *Camera View*: *View*, *Camera* or `Numpad 0`.)
   Render your scene with *Render* (top menu), *Render Image* or hit `F12`.
@@ -137,7 +139,7 @@ In general, you can discover the available attributes for objects and materials 
 * Let's make the planets even prettier by adding an image texture map to each 
   of them. Most planet textures are freely available from NASA. Download your own texture maps or use those from the *textures*-directory. Adjust the name of the texture image for each planet in your csv-file/dictionary.
 
-* Enable the *add_texture* function in the script's main-function. Make sure
+* Enable the `add_texture` function in the script's `main`-function. Make sure
   to provide the correct path to your images; otherwise your script will fail. 
   This function will load the image to a texture and map it using spherical coordinates.
 
@@ -155,6 +157,7 @@ In general, you can discover the available attributes for objects and materials 
     `rotation_euler.x = tilt_x/180. * pi`
 
   etc. The angles in the file are given in degrees, thus they must be converted to radians first using angle[rad] = angle[degree] / 180 * pi.
+* If you do not want to set pi manually, import the `math` module to use `math.pi` instead.
 
 ##Extra: Add rings
 * Saturn is popular for its prominent ring system. Such rings are a bit tricky to set up, so there are functions prepared that take care of this for you, stored in `rings.py`. This uses more advances techniques which we won't discuss here. In principle, for Saturn we add a disk with a hole and put a ring texture on top of it; for Uranus we create one circle with a thin thickness. 
@@ -171,7 +174,7 @@ In general, you can discover the available attributes for objects and materials 
     ```
   The reload-line ensures that the rings-module is reloaded every time you run the script. This is important if you want to make custom changes there.
 
-* Add calls for the functions `add_saturn_rings` and `add_uranus_rings` to your main function. Neptune and Jupiter also have rings, but they are very thin and we'll skip them here.
+* Add calls for the functions `add_saturn_rings` and `add_uranus_rings` to your `main` function. Neptune and Jupiter also have rings, but they are very thin and we'll skip them here.
 
 
 ##Simple orbit paths
@@ -181,19 +184,19 @@ In general, you can discover the available attributes for objects and materials 
 
 * Name the orbit paths e.g. 'Planet-Earth-Orbit' etc. If you use the same 'Planet-' prefix as for the planet spheres, they will also be automatically deleted every time you run the script again.
 
-* Adjust the circles' resolution to increase the number of points for the curve and thus its smoothness (e.g. 60). You can find this setting in the *Properties* area at the right side, in the *Data* tab (small line symbol). Add this to your *add_orbit* function as well.
+* Adjust the circles' resolution to increase the number of points for the curve and thus its smoothness (e.g. 60). You can find this setting in the *Properties* area at the right side, in the *Data* tab (small line symbol). Add this to your `add_orbit` function as well.
 
 * The circles cannot be seen in a rendered image, unless you give them some thickness. Thus increase the circles' thickness by setting the bevel depth to 0.006 or higher. In the interface, these setting are adjusted in the *Properties* area, at the tab for *Data* (bend curve symbol). Here you can look for the correct Blender attributes for your circle object and experiment which settings look good for you. Add them to your script as well.
 
 * You may want to add a material to your orbits and adjust its shadow and shading options, so that orbits do not cast or receive any shadows. This is achieved with exactly the same settings as for the Sun material which was explained above.
 
-* In fact, the planets orbit on ellipses, with the Sun at one of the focal points. We'll ignore this in this workshop and stick to the simplified circles.
+* In fact, the planets move on ellipses, with the Sun at one of the focal points. We'll ignore this in this workshop and stick to the simplified circles.
 
 
 ##Extra: Orbit eccentricity
 * Take the orbit eccentricity into account:
-shift the orbit path, so the sun lies at one of the focal points of the ellipse. I.e.: shift it in x-direction by a*ecc (semi-major axis * eccentricity).
-Scale the x-direction by a/distance, the y-direction by b/distance. b is the semi-minor axis, b = a*sqrt(1-ecc**2).
+shift the orbit path, so the sun lies at one of the focal points of the ellipse. I.e.: shift it in x-direction by `a*ecc` (semi-major axis times eccentricity).
+Scale the x-direction by a/distance, the y-direction by b/distance. b is the semi-minor axis, `b = a*sqrt(1-ecc**2)`.
 (Don't forget `import math` for sqrt!)
 
 * The orbit orientation is not yet correct - in truth, the orbits axes are not aligned! But taking the true orientation and also the inclination angle against e.g. Earth's orbit plane into account is beyond the scope of this workshop.
