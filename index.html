@@ -34,7 +34,7 @@
         <h1>
 <a id="creating-planets-of-the-solar-system-with-blender" class="anchor" href="#creating-planets-of-the-solar-system-with-blender" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating planets of the solar system with Blender</h1>
 
-<p><img width="100%" src="./planets-long.png"></p>
+<p><img width="100%" src="http://kristinriebe.github.io/solarsystem-workshop/images/planets-long.png"></p>
 
 <p>These instructions will guide you through creating planets of the solar system in 3D using Blender and its Python API. At the end, you will have written a Python script which creates your planets, their orbits and even animates their rotation from scratch in one go. If you get stuck at some point, you can contact me at 
 <a href="mailto:kristin.riebe@mk-star.de">kristin.riebe@mk-star.de</a>.</p>
@@ -108,7 +108,7 @@ Go to the <em>Text Editor</em> area, (left main area) and load a script by selec
 Improve it such that the <code>size</code> (radius) of the sphere is provided as an 
 additional parameter. This should be used in Blender's 
 <code>primitive_uv_sphere_add</code> function to create the sphere.</p></li>
-<li><p>Provide e.g. <code>size=2</code> in the <em>main</em>-function when creating the sphere and 
+<li><p>Provide e.g. <code>size=2</code> in the <code>main</code>-function when creating the sphere and 
 rerun your script. Check if the size has changed correctly. Note that the 
 script contains a <code>delete_objects</code>-function that removes all objects with 
 names matching <code>Planet*</code> from the scene. This is useful to cleanup before 
@@ -173,8 +173,9 @@ csv-file. Blender comes with bundled Python that also includes the csv-module fo
 </li>
 </ul>
 </li>
-<li><p>In your main-function, write a loop to create more than one planet at once, 
-with different names and sizes. Use the column <code>art_distance</code> from the provided csv-file to set the planets apart, e.g. along the +<code>x</code>-axis, 
+<li><p>In your <code>main</code>-function, write a loop to create more than one planet at 
+once, with different names and sizes. Use the column <code>art_distance</code> from the 
+provided csv-file to set the planets apart, e.g. along the +<code>x</code>-axis, 
 using <code>location</code> when adding the sphere.</p></li>
 <li><p>Take care to <strong>scale down the radii</strong> of the planets and the Sun to something between 0 and 10 Blender units, otherwise they may be too big to be visible in your Blender scene. (A basic size scale factor of 1/100,000 is a good value. For better visual impressions, increase the size of rocklike planets (Mercury, Venus, Earth, Mars) by a factor of 6, gas planets by a factor of 2.)</p></li>
 </ul>
@@ -182,14 +183,14 @@ using <code>location</code> when adding the sphere.</p></li>
 <h2>
 <a id="sun-material-adjustments" class="anchor" href="#sun-material-adjustments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sun material adjustments</h2>
 
-<p>The Sun is special, since its a self-glowing star. Thus it needs some material adjustments. 
-In general, you can discover the available attributes for objects and materials via the <em>Python Console</em>: </p>
+<p>The Sun is special, since it is a self-glowing star. Thus its material needs to be adjusted. 
+In general, you can always discover the available attributes for objects and materials via the <em>Python Console</em>: </p>
 
 <ul>
 <li>First get the Sun-object: <code>obj = bpy.data.objects['Planet-Sun']</code>.<br>
 </li>
 <li>Type <code>obj.</code> and press <code>Ctrl</code>+<code>Space</code> in the console to get autocomplete suggestions.</li>
-<li>You can select the (first) material of your object using: 
+<li>You can select the (first) material of your object using:<br>
 <code>mat = obj.material_slots[0].material</code>.</li>
 <li>Type <code>mat.</code> and press <code>Ctrl</code>+<code>Space</code> in the console to explore the available attributes. You can also set them here and see their effects immediately.</li>
 <li>
@@ -203,18 +204,19 @@ mat.use_shadows <span class="pl-k">=</span> <span class="pl-c1">False</span>
 mat.use_cast_shadows <span class="pl-k">=</span> <span class="pl-c1">False</span>
 mat.use_cast_buffer_shadows <span class="pl-k">=</span> <span class="pl-c1">False</span></pre></div>
 </li>
+<li>These settings could also be adjusted in the GUI, in the <em>Properties</em> area, <em>Material</em> tab, in sections <code>Shading</code> and <code>Shadow</code>. They ensure that the Sun does not receive any shadows and does not cast any.</li>
 </ul>
 
 <h2>
 <a id="colors-and-texture" class="anchor" href="#colors-and-texture" aria-hidden="true"><span class="octicon octicon-link"></span></a>Colors and texture</h2>
 
 <ul>
-<li><p>It's boring if they all have the same color, so use a different color triplet for each planet. You can use the values from the file (parse them and convert them to a list of three values) or choose your own. Pass the color-triplet on to the <em>add_material</em> function, use it for <code>diffuse_color</code> in the script and rerun the script. Check, if every planet got its own color now.</p></li>
+<li><p>It's boring if all the planets have got the same color, so use a different color triplet for each planet. You can use the values from the file (parse them and convert them to a list of three values) or choose your own. Pass the color-triplet on to the <code>add_material</code> function, use it for <code>diffuse_color</code> in the script and rerun the script. Check, if every planet got its own color now.</p></li>
 <li><p>Adjust the position of your camera, so you get a good view on all your planets. (Check by going into <em>Camera View</em>: <em>View</em>, <em>Camera</em> or <code>Numpad 0</code>.)
 Render your scene with <em>Render</em> (top menu), <em>Render Image</em> or hit <code>F12</code>.</p></li>
 <li><p>Let's make the planets even prettier by adding an image texture map to each 
 of them. Most planet textures are freely available from NASA. Download your own texture maps or use those from the <em>textures</em>-directory. Adjust the name of the texture image for each planet in your csv-file/dictionary.</p></li>
-<li><p>Enable the <em>add_texture</em> function in the script's main-function. Make sure
+<li><p>Enable the <code>add_texture</code> function in the script's <code>main</code>-function. Make sure
 to provide the correct path to your images; otherwise your script will fail. 
 This function will load the image to a texture and map it using spherical coordinates.</p></li>
 <li><p>Rerun your script. The texture will only be visible when rendered, so render your scene again (<code>F12</code>). </p></li>
@@ -239,6 +241,7 @@ The true direction to which the planet's north pole points is usually given in E
 
 <p>etc. The angles in the file are given in degrees, thus they must be converted to radians first using angle[rad] = angle[degree] / 180 * pi.</p>
 </li>
+<li>If you do not want to set pi manually, import the <code>math</code> module to use <code>math.pi</code> instead.</li>
 </ul>
 
 <h2>
@@ -258,7 +261,7 @@ imp.reload(rings)</pre></div>
 
 <p>The reload-line ensures that the rings-module is reloaded every time you run the script. This is important if you want to make custom changes there.</p>
 </li>
-<li><p>Add calls for the functions <code>add_saturn_rings</code> and <code>add_uranus_rings</code> to your main function. Neptune and Jupiter also have rings, but they are very thin and we'll skip them here.</p></li>
+<li><p>Add calls for the functions <code>add_saturn_rings</code> and <code>add_uranus_rings</code> to your <code>main</code> function. Neptune and Jupiter also have rings, but they are very thin and we'll skip them here.</p></li>
 </ul>
 
 <h2>
@@ -268,10 +271,10 @@ imp.reload(rings)</pre></div>
 <li><p>Add a circle as orbit path for each planet (not for the Sun!), using <code>art_distance</code> for radius. This can be done via Blender's interface, <code>Add</code>, <code>Curve</code>, <code>Circle</code>. </p></li>
 <li><p>Check in the log-output (<em>Info</em> window at the top) which function was used. Write your own <code>add_orbit</code>-function for your script to add an orbit circle for each planet. Do not make an orbit path for the Sun.</p></li>
 <li><p>Name the orbit paths e.g. 'Planet-Earth-Orbit' etc. If you use the same 'Planet-' prefix as for the planet spheres, they will also be automatically deleted every time you run the script again.</p></li>
-<li><p>Adjust the circles' resolution to increase the number of points for the curve and thus its smoothness (e.g. 60). You can find this setting in the <em>Properties</em> area at the right side, in the <em>Data</em> tab (small line symbol). Add this to your <em>add_orbit</em> function as well.</p></li>
+<li><p>Adjust the circles' resolution to increase the number of points for the curve and thus its smoothness (e.g. 60). You can find this setting in the <em>Properties</em> area at the right side, in the <em>Data</em> tab (small line symbol). Add this to your <code>add_orbit</code> function as well.</p></li>
 <li><p>The circles cannot be seen in a rendered image, unless you give them some thickness. Thus increase the circles' thickness by setting the bevel depth to 0.006 or higher. In the interface, these setting are adjusted in the <em>Properties</em> area, at the tab for <em>Data</em> (bend curve symbol). Here you can look for the correct Blender attributes for your circle object and experiment which settings look good for you. Add them to your script as well.</p></li>
 <li><p>You may want to add a material to your orbits and adjust its shadow and shading options, so that orbits do not cast or receive any shadows. This is achieved with exactly the same settings as for the Sun material which was explained above.</p></li>
-<li><p>In fact, the planets orbit on ellipses, with the Sun at one of the focal points. We'll ignore this in this workshop and stick to the simplified circles.</p></li>
+<li><p>In fact, the planets move on ellipses, with the Sun at one of the focal points. We'll ignore this in this workshop and stick to the simplified circles.</p></li>
 </ul>
 
 <h2>
@@ -279,8 +282,8 @@ imp.reload(rings)</pre></div>
 
 <ul>
 <li><p>Take the orbit eccentricity into account:
-shift the orbit path, so the sun lies at one of the focal points of the ellipse. I.e.: shift it in x-direction by a<em>ecc (semi-major axis * eccentricity).
-Scale the x-direction by a/distance, the y-direction by b/distance. b is the semi-minor axis, b = a</em>sqrt(1-ecc**2).
+shift the orbit path, so the sun lies at one of the focal points of the ellipse. I.e.: shift it in x-direction by <code>a*ecc</code> (semi-major axis times eccentricity).
+Scale the x-direction by a/distance, the y-direction by b/distance. b is the semi-minor axis, <code>b = a*sqrt(1-ecc**2)</code>.
 (Don't forget <code>import math</code> for sqrt!)</p></li>
 <li><p>The orbit orientation is not yet correct - in truth, the orbits axes are not aligned! But taking the true orientation and also the inclination angle against e.g. Earth's orbit plane into account is beyond the scope of this workshop.</p></li>
 </ul>
