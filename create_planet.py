@@ -8,14 +8,14 @@ import math
 # extend the functions according to your own needs.
 
 def delete_planets():
-    """Delete objects with names matching 'Planet*'"""
+    """Delete objects with names matching 'Planet-*'"""
     
     bpy.ops.object.select_all(action='DESELECT')
-    bpy.ops.object.select_pattern(pattern="Planet*")
+    bpy.ops.object.select_pattern(pattern="Planet-*")
     n = len(bpy.context.selected_objects)
     bpy.ops.object.delete()
 
-    print("%d sphere(s) were deleted." % n)
+    print("%d planet(s) were deleted." % n)
 
     return
 
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     mat = add_material(obj, name)
     
     # add texture to the material
-    #imgname = dir + "earth.jpg"
+    #imgname = dir + "textures/earth.jpg"
     #add_texture(mat, imgname)
 
     # add flattening of planet-sphere
