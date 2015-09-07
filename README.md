@@ -17,8 +17,8 @@ Following files are provided/needed:
     a simple script for creating one planet
 * [planets.csv](https://github.com/kristinriebe/solarsystem-workshop/blob/master/planets.csv): 
     file with most basic parameters for each planet of the solar system and the sun
-* [textures](http://kristinriebe.github.io/solarsystem-workshop/textures/): 
-    directory with texture maps of the planets
+* [textures](http://kristinriebe.github.io/solarsystem-workshop/textures.zip): 
+    directory with texture maps of the planets, 17 MB
 * [rings.py](https://github.com/kristinriebe/solarsystem-workshop/blob/master/rings.py): 
     contains two functions for adding rings around Saturn and Uranus
 * (Extra:) [animate_camera.py](https://github.com/kristinriebe/blendertools/blob/master/animate_camera.py):
