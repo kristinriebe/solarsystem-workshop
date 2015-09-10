@@ -222,8 +222,7 @@ Scale the x-direction by a/distance, the y-direction by b/distance. b is the sem
 * The camera moves quite fast, you can slow it down by adjusting the animation manually:
   - Select the camera path, in *Properties* area switch to the *Curve data* tab and look for the `Evaluation time`. It is marked in green, because it is animated. Right click with the mouse and select `Clear keyframes`. 
   - In the timeline, choose frame 1. Set the curve's evaluation time to 0 and hit the `I` key while hovering over the evaluation time field. This sets a new animation keyframe (yellow). 
-  - Now set the ti
-  - me to e.g. 500 frames, set the evaluation time of the curve to 100 and again hit `I`. This sets the second (final) keyframe. Your camera will now move along the whole path within 500 frames.
+  - Now set the time to e.g. 500 frames, set the evaluation time of the curve to 100 and again hit `I`. This sets the second (final) keyframe. Your camera will now move along the whole path within 500 frames.
 
 * Further details of animations can be adjusted in the *Graph Editor*, we'll look into this in the next sections.
 
@@ -321,3 +320,6 @@ The solar system that we built up to now is still lacking in many details. Here 
 
 
 If you made it this far: thanks for staying with me and congratulations! I hope you enjoyed this tutorial. For comments and suggestions, mistakes or questions, please send a mail to kristin.riebe@mk-star.de.
+
+Interested in my final version of the Python script, which includes the steps explained in this tutorial? I've uploaded it here: [create_planet_final.py](https://cloud.aip.de/index.php/s/v4s4ChGJUJS2KPE). It doesn't contain the 'Further improvements' steps, however, since so far I didn't have enough time to include them all. If you manage to finish these, I would appreciate if you share *your* final version! :-)
+
