@@ -1,14 +1,14 @@
-#Creating planets of the solar system with Blender
+# Creating planets of the solar system with Blender
 
 <img width="100%" src="http://kristinriebe.github.io/solarsystem-workshop/images/planets-long.png"/>
 
 These instructions will guide you through creating planets of the solar system in 3D using Blender and its Python API. At the end, you will have written a Python script which creates your planets, their orbits and even animates their rotation from scratch in one go. If you get stuck at some point, you can contact me at 
-kristin.riebe@mk-star.de.
+kristinriebe@gmail.com.
 
 Have fun!
 
 
-##Materials
+## Materials
 Following files are provided/needed:
 
 * [planets-template.blend](https://github.com/kristinriebe/solarsystem-workshop/blob/master/planets-template.blend): 
@@ -33,7 +33,7 @@ It helps, if you are already a bit familiar with Blender's graphical user interf
 
 Ready? Let's get started!
 
-##Basic instructions 
+## Basic instructions 
 * Open `planets-template.blend` with Blender from the command line:
 
     `blender planets-template.blend`
@@ -54,7 +54,7 @@ Ready? Let's get started!
 If this works, then you can go ahead, expand the script and experiment with the following tasks. If it didn't work, check the output in the console from which you started Blender for error messages. 
 
 
-##Experimenting
+## Experimenting
 * Look in the Python script in your *Text area* for the `add_sphere`-function.
     Improve it such that the `size` (radius) of the sphere is provided as an 
     additional parameter. This should be used in Blender's 
@@ -70,7 +70,7 @@ If this works, then you can go ahead, expand the script and experiment with the 
 `[1,0,0]`.
 
 
-##More planets
+## More planets
 So far, all these things can be done much faster via the interface. But such a script becomes very useful when creating more than one planet at once. Let's do this! 
 
 * Write a read-routine to read planet and sun parameters from the provided 
@@ -107,7 +107,7 @@ So far, all these things can be done much faster via the interface. But such a s
 
 * Take care to **scale down the radii** of the planets and the Sun to something between 0 and 10 Blender units, otherwise they may be too big to be visible in your Blender scene. (A basic size scale factor of 1/100,000 is a good value. For better visual impressions, increase the size of rocklike planets (Mercury, Venus, Earth, Mars) by a factor of 6, gas planets by a factor of 2.)
 
-##Sun material adjustments
+## Sun material adjustments
 The Sun is special, since it is a self-glowing star. Thus its material needs to be adjusted. 
 In general, you can always discover the available attributes for objects and materials via the *Python Console*: 
 
@@ -130,7 +130,7 @@ In general, you can always discover the available attributes for objects and mat
 * These settings could also be adjusted in the GUI, in the *Properties* area, *Material* tab, in sections `Shading` and `Shadow`. They ensure that the Sun does not receive any shadows and does not cast any.
 
 
-##Colors and texture
+## Colors and texture
 * It's boring if all the planets have got the same color, so use a different color triplet for each planet. You can use the values from the file (parse them and convert them to a list of three values) or choose your own. Pass the color-triplet on to the `add_material` function, use it for `diffuse_color` in the script and rerun the script. Check, if every planet got its own color now.
 
 * Adjust the position of your camera, so you get a good view on all your planets. (Check by going into *Camera View*: *View*, *Camera* or `Numpad 0`.)
@@ -146,11 +146,11 @@ In general, you can always discover the available attributes for objects and mat
 * Rerun your script. The texture will only be visible when rendered, so render your scene again (`F12`). 
 
 
-##Flattening
+## Flattening
 * Actually, planets are rarely exact spheres, but mostly a bit flattened in z-direction. This is described by the flattening parameter, given e.g. at Wikipedia for each planet. `0` flattening is a perfect sphere. Adjust each planet-sphere's `z`-scale by the factor `1-flattening` in your script.
 
 
-##Axial tilt
+## Axial tilt
 * Improve your script even further by adding a tilt to the planet's axis. The axial tilt is defined as deviation from the axis perpendicular to the planet's orbit, with Earth's north pole pointing upwards.
   The true direction to which the planet's north pole points is usually given in Earth's coordinate system. For simplicity, the provided csv-file already gives the correct precalculated rotation angles around x, y and z-axes for each planet in the global coordinate system. Thus you only need to set:
 
@@ -159,7 +159,7 @@ In general, you can always discover the available attributes for objects and mat
   etc. The angles in the file are given in degrees, thus they must be converted to radians first using angle[rad] = angle[degree] / 180 * pi.
 * If you do not want to set pi manually, import the `math` module to use `math.pi` instead.
 
-##Extra: Add rings
+## Extra: Add rings
 * Saturn is popular for its prominent ring system. Such rings are a bit tricky to set up, so there are functions prepared that take care of this for you, stored in `rings.py`. This uses more advances techniques which we won't discuss here. In principle, for Saturn we add a disk with a hole and put a ring texture on top of it; for Uranus we create one circle with a thin thickness. 
 
 * Copy the functions over or load them as a module by adding following lines at the beginning of your script:  
@@ -177,7 +177,7 @@ In general, you can always discover the available attributes for objects and mat
 * Add calls for the functions `add_saturn_rings` and `add_uranus_rings` to your `main` function. Neptune and Jupiter also have rings, but they are very thin and we'll skip them here.
 
 
-##Simple orbit paths
+## Simple orbit paths
 * Add a circle as orbit path for each planet (not for the Sun!), using `art_distance` for radius. This can be done via Blender's interface, `Add`, `Curve`, `Circle`. 
 
 * Check in the log-output (*Info* window at the top) which function was used. Write your own `add_orbit`-function for your script to add an orbit circle for each planet. Do not make an orbit path for the Sun.
@@ -193,16 +193,16 @@ In general, you can always discover the available attributes for objects and mat
 * In fact, the planets move on ellipses, with the Sun at one of the focal points. We'll ignore this in this workshop and stick to the simplified circles.
 
 
-##Extra: Orbit eccentricity
+## Extra: Orbit eccentricity
 * Take the orbit eccentricity into account:
 shift the orbit path, so the sun lies at one of the focal points of the ellipse. I.e.: shift it in x-direction by `a*ecc` (semi-major axis times eccentricity).
 Scale the x-direction by a/distance, the y-direction by b/distance. b is the semi-minor axis, `b = a*sqrt(1-ecc**2)`.
 (Don't forget `import math` for sqrt!)
 
-* The orbit orientation is not yet correct - in truth, the orbits axes are not aligned! But taking the true orientation and also the inclination angle against e.g. Earth's orbit plane into account is beyond the scope of this workshop.
+* The orbit orientation is not yet correct - in truth, the orbit axes of the planets are not aligned! But taking the true orientation and also the inclination angle against e.g. Earth's orbit plane into account is beyond the scope of this workshop.
 
 
-##Camera Animation (may be skipped here)
+## Camera Animation (may be skipped here)
 * Let's get the camera moving and add a camera path. Follow the next steps first via Blender's graphical interface, then check the log-output and the mouse-over tips for the functions and attributes to script this part as well. 
   - Add a circle via `Add`, `Curve`, `Circle`. Rename it to something like *CameraPath*. Set its location to (0,0,0) (`Alt`+`G`). Scale it such that there is still some distance between the circle and the sun (view it from top view to check this, `Numpad 7`; scale factor ~ 3.3 if using the scales from above).
   - Switch to `Edit Mode` (`Tab` key), drag the right-most point of the circle beyond the last planet. Switch back to `Object Mode` (`Tab` key).
@@ -227,7 +227,7 @@ Scale the x-direction by a/distance, the y-direction by b/distance. b is the sem
 * Further details of animations can be adjusted in the *Graph Editor*, we'll look into this in the next sections.
 
 
-##Orbit animation
+## Orbit animation
 We will now let the planets move along their orbit paths.
 
 * First do it for one planet and its path in the interface, then code the steps by checking which functions were used in the log/hover info. 
@@ -264,7 +264,7 @@ We will now let the planets move along their orbit paths.
 * If you used ellipses, then the speed of the planets should be faster closer to the sun (according to Kepler's laws). Blender does not easily allow to do that, so we will ignore this here. Just be aware that the true speed would be different than what we currently have.
 
 
-##Rotation animation
+## Rotation animation
 Planets also rotate around their own axes, that's given by `rotperiod` in the file. This gets slightly more complicated than just adding animation keyframes for the `z`-rotation values, because the planet's axes are already tilted. If a z-rotation is added, then the planet would rotate around the current z-axis, not around the planet-axis. You can see this easily with Saturn and its rings or Earth, when changing the z-rotation value in the *3D view*, properties panel (enable with `N` if it is hidden).
 
 We therefore use a special trick: we add an axes object for each planet and assign it the axial tilt. Then we clear the rotation of the planet and *parent* it to the axes object. This has the effect that the planet is basically unrotated, but inherits the tilt from its parent axes object. Now it's possible to keyframe the z-rotation of the planet!
@@ -289,7 +289,7 @@ We therefore use a special trick: we add an axes object for each planet and assi
 * Include these steps in your script, for each planet and for the Sun.
 
 
-##Render your animation
+## Render your animation
 * Render your animation by selecting `Render`, `Render Animation` in the top menu. The render resolution and other properties can be adjusted in the *Properties* area, at the *Render* tab (photo camera symbol). By default, Blender will create one png-image for each frame in the `tmp`-directory. 
 
 * You can stop the rendering any time using the `Esc` key.
@@ -305,7 +305,7 @@ We therefore use a special trick: we add an axes object for each planet and assi
   This will render the frames 1 to 600.
 
 
-##Further improvements
+## Further improvements
 The solar system that we built up to now is still lacking in many details. Here are some suggestions to improve it further:
 
 * Use real distances (scaled down by the same factor) for planets from the Sun.
@@ -319,7 +319,7 @@ The solar system that we built up to now is still lacking in many details. Here 
 * Add stars in the background as reference system, maybe even the true stars from the sky, using a sky map.
 
 
-If you made it this far: thanks for staying with me and congratulations! I hope you enjoyed this tutorial. For comments and suggestions, mistakes or questions, please send a mail to kristin.riebe@mk-star.de.
+If you made it this far: thanks for staying with me and congratulations! I hope you enjoyed this tutorial. For comments and suggestions, mistakes or questions, please send a mail to kristinriebe@gmail.com.
 
-Interested in my final version of the Python script, which includes the steps explained in this tutorial? I've uploaded it here: [create_planet_final.py](https://cloud.aip.de/index.php/s/v4s4ChGJUJS2KPE). It doesn't contain the 'Further improvements' steps, however, since so far I didn't have enough time to include them all. If you manage to finish these, I would appreciate if you share *your* final version! :-)
+Interested in my final version of the Python script, which includes the steps explained in this tutorial? I've uploaded it here: [create_planet_final.py](http://www.kristin-riebe.de/materials/create_planet_final.py). It doesn't contain the 'Further improvements' steps, however, since so far I didn't have enough time to include them all. If you manage to finish these, I would appreciate it if you share *your* final version! :-)
 
